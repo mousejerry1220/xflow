@@ -2,16 +2,32 @@ package org.xsnake.cloud.xflow.core.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.xsnake.cloud.xflow.dao.DaoCenter;
+import org.xsnake.cloud.xflow.core.register.ActivityRegister;
+import org.xsnake.cloud.xflow.core.register.ParticipantHandleRegister;
+import org.xsnake.cloud.xflow.dao.DaoTemplate;
 
 @Component
 public class ApplicationContext extends Context{
 	
 	@Autowired
-	private DaoCenter daoCenter;
+	private ActivityRegister activityRegister;
 	
-	public DaoCenter getDaoCenter() {
-		return daoCenter;
+	@Autowired
+	private ParticipantHandleRegister participantHandleRegister;
+	
+	@Autowired
+	private DaoTemplate daoTemplate;
+	
+	public ActivityRegister getActivityRegister() {
+		return activityRegister;
 	}
-    
+
+	public ParticipantHandleRegister getParticipantHandleRegister() {
+		return participantHandleRegister;
+	}
+
+	public DaoTemplate getDaoTemplate() {
+		return daoTemplate;
+	}
+	
 }

@@ -1,7 +1,6 @@
 package org.xsnake.cloud.xflow.core.context;
 
 import org.xsnake.cloud.xflow.core.ProcessDefinition;
-import org.xsnake.cloud.xflow.dao.DaoCenter;
 import org.xsnake.cloud.xflow.dao.model.ProcessInstance;
 import org.xsnake.cloud.xflow.dao.model.Task;
 
@@ -12,8 +11,9 @@ public class TaskContext extends Context implements IXflowContext{
 	private Task task;
 	
 	public TaskContext(ApplicationContext applicationContext , String taskId){
-		DaoCenter daoCenter = applicationContext.getDaoCenter();
-		task = daoCenter.getTaskDao().get(taskId);
+//		DaoCenter daoCenter = applicationContext.getDaoCenter();
+//		task = daoCenter.getTaskDao().get(taskId);
+		task = null;
 		processInstanceContext = new ProcessInstanceContext(applicationContext,task.getProcessInstanceId());
 	}
 

@@ -1,7 +1,9 @@
 package org.xsnake.cloud.xflow.core;
 
+import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 import org.xsnake.cloud.xflow.core.context.OperateContext;
+import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
 public abstract class ParticipantActivity extends Activity{
 
@@ -10,7 +12,21 @@ public abstract class ParticipantActivity extends Activity{
 	//该属性是设置如果参与者为空则自动完成任务
 	public final static String NONE_PARTICIPANT_AUTOCOMPLETE = "NONE_PARTICIPANT_AUTOCOMPLETE";
 	
-	public abstract void createTask(IXflowContext context);
+	ParticipantHandle participantHandle;
+	
+	public ParticipantActivity(Element activityElement) {
+		super(activityElement);
+		Element participantElement = activityElement.element(DefinitionConstant.ELEMENT_ACTIVITY_PARTICIPANTS);
+		if(participantElement==null){
+			throw new XflowDefinitionException("任务类型活动必须指定参与者");
+		}
+		
+		
+	}
+	
+	public final void createTask(IXflowContext context){
+		
+	}
 	
 	public abstract void doTask(OperateContext context);
 
@@ -19,5 +35,5 @@ public abstract class ParticipantActivity extends Activity{
 	public final void doWork(IXflowContext context) {
 		doTask((OperateContext)context);
 	}
-		
+	
 }

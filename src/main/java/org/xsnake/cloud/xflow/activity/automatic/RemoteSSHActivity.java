@@ -1,7 +1,8 @@
-package org.xsnake.cloud.xflow.activity;
+package org.xsnake.cloud.xflow.activity.automatic;
 
 import java.io.IOException;
 
+import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.AutomaticActivity;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 
@@ -18,6 +19,10 @@ import com.trilead.ssh2.Session;
 </dependency>
 */
 public class RemoteSSHActivity extends AutomaticActivity {
+
+	public RemoteSSHActivity(Element activityElement) {
+		super(activityElement);
+	}
 
 	private static final long serialVersionUID = 1L;
 

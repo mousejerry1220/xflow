@@ -2,8 +2,8 @@ package org.xsnake.cloud.xflow.core;
 
 import java.util.List;
 
-import org.xsnake.cloud.xflow.api.Participant;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
+import org.xsnake.cloud.xflow.service.api.Participant;
 
 public abstract class ParticipantHandle {
 

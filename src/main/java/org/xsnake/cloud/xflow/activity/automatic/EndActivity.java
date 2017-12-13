@@ -1,10 +1,16 @@
-package org.xsnake.cloud.xflow.activity;
+package org.xsnake.cloud.xflow.activity.automatic;
 
+import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.AutomaticActivity;
 import org.xsnake.cloud.xflow.core.Endedable;
+import org.xsnake.cloud.xflow.core.NoNextTarget;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 
-public final class EndActivity extends AutomaticActivity implements Endedable {
+public final class EndActivity extends AutomaticActivity implements Endedable , NoNextTarget {
+
+	public EndActivity(Element activityElement) {
+		super(activityElement);
+	}
 
 	private static final long serialVersionUID = 1L;
 

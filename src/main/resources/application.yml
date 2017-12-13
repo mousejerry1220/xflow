@@ -1,0 +1,11 @@
+xflow:
+  participants:
+    assign : 123
+  activitys: 
+    a : 11111
+    b : ccc
+jdbc:
+  url: jdbc:oracle:thin:@(DESCRIPTION= (ADDRESS=(PROTOCOL=tcp)(HOST=192.168.6.109)(PORT=1527))(CONNECT_DATA=(SERVICE_NAME=UAT)(INSTANCE_NAME=UAT)))
+  driverClassName: oracle.jdbc.driver.OracleDriver
+  username: apps
+  password: apps

@@ -2,7 +2,7 @@ package org.xsnake.cloud.xflow.core.context;
 
 import java.util.List;
 
-import org.xsnake.cloud.xflow.api.Participant;
+import org.xsnake.cloud.xflow.service.api.Participant;
 
 public class OperateContext extends TaskContext{
 

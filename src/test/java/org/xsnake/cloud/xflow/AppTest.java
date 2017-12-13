@@ -1,36 +1,29 @@
 package org.xsnake.cloud.xflow;
 
-import junit.framework.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.xsnake.cloud.xflow.core.register.ActivityRegister;
+import org.xsnake.cloud.xflow.core.register.ParticipantHandleRegister;
+
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
-/**
- * Unit test for simple App.
- */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(Application.class)
 public class AppTest extends TestCase{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+	@Autowired
+	ActivityRegister activityRegister;
+	
+	@Autowired
+	ParticipantHandleRegister participantHandleRegister;
+	
+	@Test
+	public void test() throws Exception {
+		System.out.println(activityRegister.getActivitys());
+		System.out.println(participantHandleRegister.getParticipants());
+	}
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
 }
