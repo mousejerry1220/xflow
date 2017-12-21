@@ -1,7 +1,11 @@
 package org.xsnake.cloud.xflow.service.api;
 
 import java.io.Serializable;
-
+/**
+ * 
+ * @author Jerry.Zhao
+ *
+ */
 public class Participant implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

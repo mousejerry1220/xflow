@@ -3,7 +3,11 @@ package org.xsnake.cloud.xflow.service.api;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 
+ * @author Jerry.Zhao
+ *
+ */
 public class Page<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;

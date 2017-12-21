@@ -21,8 +21,6 @@ public class ProcessDefinition implements Serializable{
 	private List<Activity> activityList;
 	
 	private List<Transition> transitionList;
-
-	private String id;
 	
 	//相同code的流程代表一种流程的不同版本
 	private String code;
@@ -122,21 +120,13 @@ public class ProcessDefinition implements Serializable{
 		return list;
 	}
 
-	public static ProcessDefinition parse(ApplicationContext context,String id,final String code,final String processDefinitionXML) throws DocumentException{
+	public static ProcessDefinition parse(ApplicationContext context,final String code,final String processDefinitionXML) throws DocumentException{
 		//如果id不为空则试图从缓存中获取数据如果获取成功
 		ProcessDefinition processDefinition = new ProcessDefinition(context,processDefinitionXML);
-		if(id == null){
-//			id = StringUtils.getUUID();
-		}
 		//初始化完毕后将其缓存
 		processDefinition.processDefinitionXML = processDefinitionXML;
-		processDefinition.id = id;
 		processDefinition.code = code;
 		return processDefinition;
-	}
-	
-	public static ProcessDefinition parse(String code,String processDefinitionXML){
-		return parse(null,processDefinitionXML);
 	}
 
 	public List<Activity> getActivityList() {
@@ -145,10 +135,6 @@ public class ProcessDefinition implements Serializable{
 
 	public List<Transition> getTransitionList() {
 		return transitionList;
-	}
-
-	public String getId() {
-		return id;
 	}
 	
 	public String getCode() {

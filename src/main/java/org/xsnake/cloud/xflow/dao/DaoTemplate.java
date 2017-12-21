@@ -13,6 +13,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.CallableStatementCallback;
@@ -170,40 +171,40 @@ public class DaoTemplate {
 		return jdbcTemplate.queryForObject(sql,Long.class);
 	}
 	
-	public BigDecimal queryBigDecimal(String sql,Object arg){
-		return queryBigDecimal(sql, new Object[]{arg});
-	}
-	
 	public BigDecimal queryBigDecimal(String sql,Object[] args){
-		return jdbcTemplate.queryForObject(sql, args,BigDecimal.class);
+		try{
+			return jdbcTemplate.queryForObject(sql, args,BigDecimal.class);
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 	
 	public BigDecimal queryBigDecimal(String sql){
-		return jdbcTemplate.queryForObject(sql,BigDecimal.class);
-	}
-	
-	public String queryString(String sql,Object arg){
-		return jdbcTemplate.queryForObject(sql, new Object[]{arg},String.class);
+		return queryBigDecimal(sql,null);
 	}
 	
 	public String queryString(String sql,Object[] args){
-		return jdbcTemplate.queryForObject(sql, args,String.class);
+		try{
+			return jdbcTemplate.queryForObject(sql, args,String.class);
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 	
 	public String queryString(String sql){
-		return jdbcTemplate.queryForObject(sql,String.class);
+		return queryString(sql,null);
 	}
 	
 	public <T> T queryObject(String sql,Object[] args,Class<T> clazz){
-		return jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<T>(clazz));
-	}
-	
-	public <T> T queryObject(String sql,String arg,Class<T> clazz){
-		return queryObject(sql, new Object[]{arg}, clazz);
+		try{
+			return jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<T>(clazz));
+		}catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 	
 	public <T> T queryObject(String sql,Class<T> clazz){
-		return queryObject(sql, (Object[])null, clazz);
+		return queryObject(sql, null, clazz);
 	}
 	
 	public Page<Map<String,Object>> search(String sql, Object[] args, int currentPage ,int pageSize) {

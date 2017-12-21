@@ -1,4 +1,4 @@
-package org.xsnake.cloud.xflow.dao.model;
+package org.xsnake.cloud.xflow.service.api.model;
 
 public class Task {
 

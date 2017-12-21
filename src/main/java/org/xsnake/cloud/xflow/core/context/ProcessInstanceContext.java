@@ -1,7 +1,7 @@
 package org.xsnake.cloud.xflow.core.context;
 
 import org.xsnake.cloud.xflow.core.ProcessDefinition;
-import org.xsnake.cloud.xflow.dao.model.ProcessInstance;
+import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
 
 public class ProcessInstanceContext extends Context implements IXflowContext{
 
