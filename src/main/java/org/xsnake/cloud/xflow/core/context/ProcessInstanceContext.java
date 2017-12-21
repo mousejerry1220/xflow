@@ -1,35 +1,27 @@
 package org.xsnake.cloud.xflow.core.context;
 
-import org.xsnake.cloud.xflow.core.ProcessDefinition;
-import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
 
 public class ProcessInstanceContext extends Context implements IXflowContext{
 
 	protected ApplicationContext applicationContext;
 	
-	protected ProcessInstance processInstance;
+	protected ProcessInstanceVo processInstanceVo;
 	
-	protected ProcessDefinition processDefinition;
+	protected String businessForm;
 	
-	protected String businessInfo;
-	
-	protected ProcessInstanceContext(ApplicationContext applicationContext ,String processInstanceId) {
-		
+	public ProcessInstanceContext(ApplicationContext applicationContext , ProcessInstanceVo processInstanceVo) {
+		this.applicationContext = applicationContext;
+		this.processInstanceVo = processInstanceVo;
 	}
 
 	@Override
-	public ProcessInstance getProcessInstance() {
-		return processInstance;
+	public ProcessInstanceVo getProcessInstanceVo() {
+		return processInstanceVo;
 	}
 
-	@Override
-	public ProcessDefinition getProcessDefinition() {
-		return processDefinition;
-	}
-
-	@Override
-	public String getBusinessInfo() {
-		return businessInfo;
+	public String getBusinessForm() {
+		return businessForm;
 	}
 
 	public ApplicationContext getApplicationContext() {

@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.xsnake.cloud.xflow.core.Activity;
 import org.xsnake.cloud.xflow.core.DefinitionConstant;
+import org.xsnake.cloud.xflow.core.participant.AssignParticipant;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
-import org.xsnake.cloud.xflow.participant.AssignParticipant;
 
 @Component  
 @ConfigurationProperties(prefix="xflow")

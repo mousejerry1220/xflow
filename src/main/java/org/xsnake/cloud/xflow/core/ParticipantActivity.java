@@ -1,5 +1,7 @@
 package org.xsnake.cloud.xflow.core;
 
+import java.util.List;
+
 import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 import org.xsnake.cloud.xflow.core.context.OperateContext;
@@ -28,12 +30,12 @@ public abstract class ParticipantActivity extends Activity{
 		
 	}
 	
-	public abstract void doTask(OperateContext context);
+	public abstract List<Transition> doTask(OperateContext context);
 
 	//从人工参与环节进来的请求都为人为操作的，其上线文必为OperateContext
 	@Override
-	public final void doWork(IXflowContext context) {
-		doTask((OperateContext)context);
+	public final List<Transition> doWork(IXflowContext context) {
+		return doTask((OperateContext)context);
 	}
 	
 }

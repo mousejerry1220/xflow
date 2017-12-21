@@ -6,23 +6,25 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.xsnake.cloud.xflow.activity.automatic.DecisionActivity;
-import org.xsnake.cloud.xflow.activity.automatic.EndActivity;
-import org.xsnake.cloud.xflow.activity.automatic.ForkActivity;
-import org.xsnake.cloud.xflow.activity.automatic.GetHttpActivity;
-import org.xsnake.cloud.xflow.activity.automatic.JoinActivity;
-import org.xsnake.cloud.xflow.activity.automatic.PostHttpActivity;
-import org.xsnake.cloud.xflow.activity.automatic.ProcedureActivity;
-import org.xsnake.cloud.xflow.activity.automatic.RemoteSSHActivity;
-import org.xsnake.cloud.xflow.activity.automatic.SVNActivity;
-import org.xsnake.cloud.xflow.activity.automatic.SendMailActivity;
-import org.xsnake.cloud.xflow.activity.automatic.StartActivity;
-import org.xsnake.cloud.xflow.activity.participant.DecisionTaskActivity;
-import org.xsnake.cloud.xflow.activity.participant.MultiTaskActivity;
-import org.xsnake.cloud.xflow.activity.participant.SupportTaskActivity;
-import org.xsnake.cloud.xflow.activity.participant.TaskActivity;
 import org.xsnake.cloud.xflow.core.Activity;
 import org.xsnake.cloud.xflow.core.DefinitionConstant;
+import org.xsnake.cloud.xflow.core.activity.AsynSubProcessActivity;
+import org.xsnake.cloud.xflow.core.activity.DecisionActivity;
+import org.xsnake.cloud.xflow.core.activity.DecisionTaskActivity;
+import org.xsnake.cloud.xflow.core.activity.EndActivity;
+import org.xsnake.cloud.xflow.core.activity.ForkActivity;
+import org.xsnake.cloud.xflow.core.activity.GetHttpActivity;
+import org.xsnake.cloud.xflow.core.activity.JoinActivity;
+import org.xsnake.cloud.xflow.core.activity.MultiTaskActivity;
+import org.xsnake.cloud.xflow.core.activity.PostHttpActivity;
+import org.xsnake.cloud.xflow.core.activity.ProcedureActivity;
+import org.xsnake.cloud.xflow.core.activity.RemoteSSHActivity;
+import org.xsnake.cloud.xflow.core.activity.SVNActivity;
+import org.xsnake.cloud.xflow.core.activity.SendMailActivity;
+import org.xsnake.cloud.xflow.core.activity.StartActivity;
+import org.xsnake.cloud.xflow.core.activity.SupportTaskActivity;
+import org.xsnake.cloud.xflow.core.activity.SynSubProcessActivity;
+import org.xsnake.cloud.xflow.core.activity.TaskActivity;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
 @Component  
@@ -54,6 +56,9 @@ public class ActivityRegister {
 		activitys.put(DefinitionConstant.TYPE_ACTIVITY_MAIL, SendMailActivity.class.getName());
 		activitys.put(DefinitionConstant.TYPE_ACTIVITY_START, StartActivity.class.getName());
 		activitys.put(DefinitionConstant.TYPE_ACTIVITY_SVN, SVNActivity.class.getName());
+
+		activitys.put(DefinitionConstant.TYPE_ACTIVITY_ASYN_SUB, AsynSubProcessActivity.class.getName());
+		activitys.put(DefinitionConstant.TYPE_ACTIVITY_SYN_SUB, SynSubProcessActivity.class.getName());
 		
 		activitys.put(DefinitionConstant.TYPE_ACTIVITY_TASK_DECISION, DecisionTaskActivity.class.getName());
 		activitys.put(DefinitionConstant.TYPE_ACTIVITY_TASK_MULTI, MultiTaskActivity.class.getName());

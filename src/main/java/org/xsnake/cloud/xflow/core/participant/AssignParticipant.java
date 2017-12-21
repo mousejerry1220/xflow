@@ -1,4 +1,4 @@
-package org.xsnake.cloud.xflow.participant;
+package org.xsnake.cloud.xflow.core.participant;
 
 import java.io.Serializable;
 import java.util.List;

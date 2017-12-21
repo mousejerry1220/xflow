@@ -1,7 +1,11 @@
-package org.xsnake.cloud.xflow.activity.automatic;
+package org.xsnake.cloud.xflow.core.activity;
+
+import java.util.List;
 
 import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.AutomaticActivity;
+import org.xsnake.cloud.xflow.core.Transition;
+import org.xsnake.cloud.xflow.core.context.ApplicationContext;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
@@ -13,14 +17,12 @@ public final class StartActivity extends AutomaticActivity {
 
 	private static final long serialVersionUID = 1L;
 
-	public void doWork(IXflowContext context){
-		//创建并缓存流程实例
-		
-		//发送事件消息
+	public List<Transition> doWork(IXflowContext context){
+		return null;
 	}
 
 	@Override
-	public void definitionValidate() {
+	public void definitionValidate(ApplicationContext context) {
 		if(toTransitionList.size() != 1){
 			throw new XflowDefinitionException("开始活动有且只能有一个出口路径");
 		}

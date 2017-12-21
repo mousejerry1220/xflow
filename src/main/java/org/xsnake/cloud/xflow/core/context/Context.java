@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Context implements IContext{
 
-protected Map<String,Object> map = new ConcurrentHashMap<String, Object>();
+	protected Map<String,Object> map = new ConcurrentHashMap<String, Object>();
 	
     public Object getAttribute(final String id) {
         Object obj = this.map.get(id);

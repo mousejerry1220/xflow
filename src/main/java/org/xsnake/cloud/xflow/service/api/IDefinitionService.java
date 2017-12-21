@@ -1,6 +1,6 @@
 package org.xsnake.cloud.xflow.service.api;
 
-import org.xsnake.cloud.xflow.service.api.model.Definition;
+import org.xsnake.cloud.xflow.service.api.vo.DefinitionVo;
 /**
  * 
  * @author Jerry.Zhao
@@ -16,7 +16,7 @@ public interface IDefinitionService {
 	 * @param keyword
 	 * @return
 	 */
-	Page<Definition> query(PageCondition pageCondition);
+	Page<DefinitionVo> query(PageCondition pageCondition);
 	
 	/**
 	 * 删除流程定义

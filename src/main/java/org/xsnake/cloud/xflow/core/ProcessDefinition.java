@@ -10,8 +10,10 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.xsnake.cloud.xflow.activity.automatic.StartActivity;
+import org.xsnake.cloud.xflow.core.activity.EndActivity;
+import org.xsnake.cloud.xflow.core.activity.StartActivity;
 import org.xsnake.cloud.xflow.core.context.ApplicationContext;
+import org.xsnake.cloud.xflow.core.context.IXflowContext;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
 public class ProcessDefinition implements Serializable{
@@ -21,6 +23,8 @@ public class ProcessDefinition implements Serializable{
 	private List<Activity> activityList;
 	
 	private List<Transition> transitionList;
+	
+	private Activity startActivity;
 	
 	//相同code的流程代表一种流程的不同版本
 	private String code;
@@ -44,20 +48,20 @@ public class ProcessDefinition implements Serializable{
 		activityList = parseActivitys(context,activitys);
 		transitionList = parseTransitions(transitions);
 		setRelationship();
-		validate();
+		validate(context);
 	}
 	
-	private void validate() {
+	private void validate(ApplicationContext context) {
 		int startCount = 0;
 		int endCount = 0;
 		for(Activity activity : activityList){
 			if(activity instanceof StartActivity){
 				startCount++;
 			}
-			if(activity instanceof Endedable){
+			if(activity instanceof EndActivity){
 				endCount++;
 			}
-			activity.validate();
+			activity.validate(context);
 		}
 		if(startCount != 1){
 			throw new XflowDefinitionException("流程定义必须有且只有一个开始活动");
@@ -66,6 +70,7 @@ public class ProcessDefinition implements Serializable{
 		if(endCount == 0){
 			throw new XflowDefinitionException("流程定义必须至少包含一个结束活动");
 		}
+		//TODO 验证activity的id不能出现重复
 	}
 
 	private void setRelationship() {
@@ -127,6 +132,10 @@ public class ProcessDefinition implements Serializable{
 		processDefinition.processDefinitionXML = processDefinitionXML;
 		processDefinition.code = code;
 		return processDefinition;
+	}
+	
+	public boolean startProcess(IXflowContext xflowContext){
+		return startActivity.process(xflowContext);
 	}
 
 	public List<Activity> getActivityList() {

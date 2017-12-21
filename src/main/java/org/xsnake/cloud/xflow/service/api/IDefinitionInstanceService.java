@@ -1,6 +1,6 @@
 package org.xsnake.cloud.xflow.service.api;
 
-import org.xsnake.cloud.xflow.service.api.model.DefinitionInstance;
+import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstanceVo;
 
 /**
  * 定义实例的状态有，未发布，已发布。
@@ -22,29 +22,21 @@ public interface IDefinitionInstanceService {
 	 * @param version
 	 * @param xml
 	 */
-	void update(String code,int version,String xml,String remark);
-	
+	void update(String code, Long version, String xml,String remark);
 	/**
 	 * 发布定义实例未该定义的正式版本，一次只能存在一个正式版本
 	 * @param code
 	 * @param version
 	 */
-	void release(String code,int version);
+	void release(String code,Long version);
 	
-	/**
-	 * 获得当前被使用的定义实例XML
-	 * @param code
-	 * @return
-	 */
-	String getCurrentDefinitionXML(String code);
-
 	/**
 	 * 获得指定版本的定义实例XML
 	 * @param code
 	 * @param version
 	 * @return
 	 */
-	String getDefinitionXML(String code,int version);
+	String getXML(String code,Long version);
 	
 	/**
 	 * 查看定义下所有的定义实例
@@ -52,6 +44,6 @@ public interface IDefinitionInstanceService {
 	 * @param pageCondition
 	 * @return
 	 */
-	Page<DefinitionInstance> queryInstance(String code,PageCondition pageCondition);
+	Page<DefinitionInstanceVo> query(String code,PageCondition pageCondition);
 
 }

@@ -16,14 +16,6 @@ public class ProcessInstanceCondition extends PageCondition{
 	
 	int definitionVersion;
 	
-	String definitionName;
-	
-	String businessKey;
-	
-	String businessType;
-	
-	String name;
-	
 	String status;
 	
 	String parentId;
@@ -32,10 +24,72 @@ public class ProcessInstanceCondition extends PageCondition{
 	
 	String creatorId;
 	
-	String creatorName;
-	
-	String creatorType;
-	
 	Date endTime;
+	
+	String participantId;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getDefinitionCode() {
+		return definitionCode;
+	}
+
+	public void setDefinitionCode(String definitionCode) {
+		this.definitionCode = definitionCode;
+	}
+
+	public int getDefinitionVersion() {
+		return definitionVersion;
+	}
+
+	public void setDefinitionVersion(int definitionVersion) {
+		this.definitionVersion = definitionVersion;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(String creatorId) {
+		this.creatorId = creatorId;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
 	
 }
