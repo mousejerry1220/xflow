@@ -63,7 +63,9 @@ public class DefinitionConstant {
 	//内置参与者类型定义
 	
 	public static final String PARTICIPANT_ASSIGN = "assign";
+
+	public static final String TYPE_ACTIVITY_ASYN_SUB = "asynSub";
 	
-	;
+	public static final String TYPE_ACTIVITY_SYN_SUB = "synSub";
 	
 }

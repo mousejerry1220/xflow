@@ -2,8 +2,8 @@ package org.xsnake.cloud.xflow.service.api;
 
 import java.util.List;
 
-import org.xsnake.cloud.xflow.service.api.model.ActivityInstance;
-import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
+import org.xsnake.cloud.xflow.service.api.vo.ActivityInstance;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
 
 /**
  * 
@@ -11,6 +11,8 @@ import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
  *
  */
 public interface IProcessInstanceService {
+	
+	public static final String DEFAULT_BUSINESS_TYPE = "DEFAULT_BUSINESS";
 	
 	/**
 	 * 开启流程实例。一个流程定义只能同时运行一个业务流程，
@@ -21,14 +23,14 @@ public interface IProcessInstanceService {
 	 * @param creator
 	 * @return
 	 */
-	ProcessInstance start(String definitionCode,String businessType,String businessKey,String bussinessForm,Participant creator);
+	ProcessInstanceVo start(String definitionCode,String businessKey,String bussinessForm,Participant creator);
 
 	/**
 	 * 获取该业务的全部流程实例
 	 * @param businessKey
 	 * @return
 	 */
-	List<ProcessInstance> listProcessInstanceByBusinessKey(String businessType,String businessKey);
+	List<ProcessInstanceVo> listProcessInstanceByBusinessKey(String businessKey);
 	
 	/**
 	 * 获取该业务对应的运行中的流程实例，如果没有则为null
@@ -36,14 +38,14 @@ public interface IProcessInstanceService {
 	 * @param businessKey 指定的业务关键值
 	 * @return
 	 */
-	ProcessInstance getProcessInstanceByBusinessKey(String definitionCode,String businessType,String businessKey);
+	ProcessInstanceVo getRunningByBusinessKey(String definitionCode,String businessKey);
 	
 	/**
 	 * 获取流程实例
 	 * @param processInstanceId 指定的流程实例ID
 	 * @return
 	 */
-	ProcessInstance getProcessInstance(String processInstanceId);
+	ProcessInstanceVo getProcessInstance(String processInstanceId);
 
 	/**
 	 * 关闭流程实例
@@ -60,9 +62,21 @@ public interface IProcessInstanceService {
 	 * @param participant
 	 * @param comment
 	 */
-	void closeByBusinessKey(String definitionCode,String businessType,String businessKey,Participant participant,String comment);
+	void closeByBusinessKey(String definitionCode,String businessKey,Participant participant,String comment);
 
-	List<ProcessInstance> query(ProcessInstanceCondition processInstanceCondition);
+	/**
+	 * 查询符合条件的流程实例
+	 * @param processInstanceCondition
+	 * @return
+	 */
+	Page<ProcessInstanceVo> query(ProcessInstanceCondition processInstanceCondition);
+	
+	/**
+	 * 参与过的流程
+	 * @param processInstanceCondition
+	 * @return
+	 */
+	Page<ProcessInstanceVo> queryJoin(ProcessInstanceCondition processInstanceCondition);
 
 	/**
 	 * 列出流程实例的历史

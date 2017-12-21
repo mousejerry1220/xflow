@@ -1,4 +1,4 @@
-package org.xsnake.cloud.xflow.activity.automatic;
+package org.xsnake.cloud.xflow.core.activity;
 
 import java.io.File;
 

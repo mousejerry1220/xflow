@@ -1,15 +1,12 @@
 package org.xsnake.cloud.xflow.core.context;
 
-import org.xsnake.cloud.xflow.core.ProcessDefinition;
-import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
 
 public interface IXflowContext extends IContext {
 
-	ProcessInstance getProcessInstance();
+	ProcessInstanceVo getProcessInstanceVo();
 
-	ProcessDefinition getProcessDefinition();
-
-	String getBusinessInfo();
+	String getBusinessForm();
 	
 	ProcessInstanceContext getProcessInstanceContext();
 	

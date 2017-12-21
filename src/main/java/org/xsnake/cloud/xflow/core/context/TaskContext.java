@@ -1,8 +1,9 @@
 package org.xsnake.cloud.xflow.core.context;
 
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.Task;
 import org.xsnake.cloud.xflow.core.ProcessDefinition;
 import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
-import org.xsnake.cloud.xflow.service.api.model.Task;
 
 public class TaskContext extends Context implements IXflowContext{
 	
@@ -11,25 +12,8 @@ public class TaskContext extends Context implements IXflowContext{
 	private Task task;
 	
 	public TaskContext(ApplicationContext applicationContext , String taskId){
-//		DaoCenter daoCenter = applicationContext.getDaoCenter();
-//		task = daoCenter.getTaskDao().get(taskId);
 		task = null;
-		processInstanceContext = new ProcessInstanceContext(applicationContext,task.getProcessInstanceId());
-	}
-
-	@Override
-	public ProcessInstance getProcessInstance() {
-		return processInstanceContext.getProcessInstance();
-	}
-
-	@Override
-	public ProcessDefinition getProcessDefinition() {
-		return processInstanceContext.getProcessDefinition();
-	}
-
-	@Override
-	public String getBusinessInfo() {
-		return processInstanceContext.getBusinessInfo();
+//		processInstanceContext = new ProcessInstanceContext(applicationContext,task.getProcessInstanceId());
 	}
 
 	public ProcessInstanceContext getXflowContext() {
@@ -53,6 +37,18 @@ public class TaskContext extends Context implements IXflowContext{
 	@Override
 	public ApplicationContext getApplicationContext() {
 		return processInstanceContext.getApplicationContext();
+	}
+
+	@Override
+	public String getBusinessForm() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProcessInstanceVo getProcessInstanceVo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

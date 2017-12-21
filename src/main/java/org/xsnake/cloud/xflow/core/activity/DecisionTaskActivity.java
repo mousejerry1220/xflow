@@ -1,7 +1,11 @@
-package org.xsnake.cloud.xflow.activity.participant;
+package org.xsnake.cloud.xflow.core.activity;
+
+import java.util.List;
 
 import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.ParticipantActivity;
+import org.xsnake.cloud.xflow.core.Transition;
+import org.xsnake.cloud.xflow.core.context.ApplicationContext;
 import org.xsnake.cloud.xflow.core.context.OperateContext;
 
 //可以有多个流转，人为选择走哪一个分支，把多个流转都存在任务信息中，前台读取
@@ -14,14 +18,12 @@ public class DecisionTaskActivity extends ParticipantActivity{
 	}
 
 	@Override
-	public void doTask(OperateContext context) {
-		// TODO Auto-generated method stub
-		
+	public List<Transition> doTask(OperateContext context) {
+		return null;
 	}
 
 	@Override
-	public void definitionValidate() {
-		// TODO Auto-generated method stub
+	public void definitionValidate(ApplicationContext context) {
 		
 	}
 	

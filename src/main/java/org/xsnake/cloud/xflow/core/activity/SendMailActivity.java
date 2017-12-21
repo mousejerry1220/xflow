@@ -1,7 +1,11 @@
-package org.xsnake.cloud.xflow.activity.automatic;
+package org.xsnake.cloud.xflow.core.activity;
+
+import java.util.List;
 
 import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.AutomaticActivity;
+import org.xsnake.cloud.xflow.core.Transition;
+import org.xsnake.cloud.xflow.core.context.ApplicationContext;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 
 /**
@@ -19,12 +23,12 @@ public class SendMailActivity extends AutomaticActivity{
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doWork(IXflowContext context){
-		
+	public List<Transition> doWork(IXflowContext context){
+		return null;
 	}
 
 	@Override
-	public void definitionValidate() {
+	public void definitionValidate(ApplicationContext context) {
 		
 	}
 

@@ -5,7 +5,9 @@ xflow:
     a : 11111
     b : ccc
 jdbc:
-  url: jdbc:oracle:thin:@(DESCRIPTION= (ADDRESS=(PROTOCOL=tcp)(HOST=192.168.6.109)(PORT=1527))(CONNECT_DATA=(SERVICE_NAME=UAT)(INSTANCE_NAME=UAT)))
-  driverClassName: oracle.jdbc.driver.OracleDriver
-  username: apps
-  password: apps
+  #url: jdbc:oracle:thin:@(DESCRIPTION= (ADDRESS=(PROTOCOL=tcp)(HOST=192.168.6.109)(PORT=1527))(CONNECT_DATA=(SERVICE_NAME=UAT)(INSTANCE_NAME=UAT)))
+  url: jdbc:mysql://localhost:3306/xsnake_xflow
+  #driverClassName: oracle.jdbc.driver.OracleDriver
+  driverClassName: com.mysql.jdbc.Driver
+  username: root
+  password: root
