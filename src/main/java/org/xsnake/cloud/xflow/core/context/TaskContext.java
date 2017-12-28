@@ -1,9 +1,7 @@
 package org.xsnake.cloud.xflow.core.context;
 
-import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstance;
 import org.xsnake.cloud.xflow.service.api.vo.Task;
-import org.xsnake.cloud.xflow.core.ProcessDefinition;
-import org.xsnake.cloud.xflow.service.api.model.ProcessInstance;
 
 public class TaskContext extends Context implements IXflowContext{
 	
@@ -46,7 +44,7 @@ public class TaskContext extends Context implements IXflowContext{
 	}
 
 	@Override
-	public ProcessInstanceVo getProcessInstanceVo() {
+	public ProcessInstance getProcessInstance() {
 		// TODO Auto-generated method stub
 		return null;
 	}

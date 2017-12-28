@@ -1,12 +1,12 @@
 package org.xsnake.cloud.xflow.service.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.dom4j.DocumentException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xsnake.cloud.xflow.core.ProcessDefinition;
@@ -15,16 +15,18 @@ import org.xsnake.cloud.xflow.core.context.IXflowContext;
 import org.xsnake.cloud.xflow.core.context.ProcessInstanceContext;
 import org.xsnake.cloud.xflow.dao.repository.DefinitionInstanceRepository;
 import org.xsnake.cloud.xflow.dao.repository.DefinitionInstanceXMLRepository;
+import org.xsnake.cloud.xflow.dao.repository.ProcessInstanceFormRepository;
 import org.xsnake.cloud.xflow.dao.repository.ProcessInstanceRepository;
 import org.xsnake.cloud.xflow.dao.repository.TaskRepository;
-import org.xsnake.cloud.xflow.dao.repository.pojo.ProcessInstancePo;
 import org.xsnake.cloud.xflow.exception.XflowBusinessException;
 import org.xsnake.cloud.xflow.service.api.IProcessInstanceService;
 import org.xsnake.cloud.xflow.service.api.Page;
 import org.xsnake.cloud.xflow.service.api.Participant;
 import org.xsnake.cloud.xflow.service.api.ProcessInstanceCondition;
 import org.xsnake.cloud.xflow.service.api.vo.ActivityInstance;
-import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstance;
+import org.xsnake.cloud.xflow.tools.LockService;
+import org.xsnake.cloud.xflow.tools.LockedException;
 
 @Service
 public class ProcessInstanceServiceImpl implements IProcessInstanceService{
@@ -44,8 +46,23 @@ public class ProcessInstanceServiceImpl implements IProcessInstanceService{
 	@Autowired
 	TaskRepository taskRepository;
 	
-	public ProcessInstanceVo start(String definitionCode, String businessKey, String businessForm,Participant creator,String parentId,String parentActivityId) {
-		//TODO 这里要检查是否已经存在同一业务，同一流程正在创建，可以通过缓存来实现
+	@Autowired
+	ProcessInstanceFormRepository processInstanceFormRepository;
+	
+	@Autowired
+	LockService lockService;
+	
+	public ProcessInstance start(String definitionCode, String businessKey, String businessForm,Participant creator,String parentId,String parentActivityId) {
+		//这里要检查是否已经存在同一业务，同一流程正在创建，可以通过缓存来实现
+		try {
+			lockService.lock(definitionCode, businessKey);
+		} catch (LockedException e) {
+			throw new XflowBusinessException("该业务已经开启了流程");
+		} catch (IOException e) {
+			//TODO 这里需要预警给管理员
+			throw new XflowBusinessException("zookeeper服务器连接异常");
+		}
+		
 		BigDecimal version = definitionInstanceRepository.getCurrentVersion(definitionCode);
 		if(version == null || version.longValue() == 0){
 			throw new XflowBusinessException("流程未设置完成");
@@ -57,79 +74,82 @@ public class ProcessInstanceServiceImpl implements IProcessInstanceService{
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		ProcessInstancePo processInstancePo = new ProcessInstancePo();
-		processInstancePo.setBusinessForm(businessForm);
-		processInstancePo.setBusinessKey(businessKey);
-		processInstancePo.setCreatorId(creator.getId());
-		processInstancePo.setCreatorName(creator.getName());
-		processInstancePo.setCreatorType(creator.getType());
-		processInstancePo.setDefinitionCode(definitionCode);
-		processInstancePo.setDefinitionVersion(version.longValue());
-		processInstancePo.setParentId(parentId);
-		processInstancePo.setParentActivityId(parentActivityId);
+		ProcessInstance processInstance = new ProcessInstance();
+		processInstance.setBusinessKey(businessKey);
+		processInstance.setCreatorId(creator.getId());
+		processInstance.setCreatorName(creator.getName());
+		processInstance.setCreatorType(creator.getType());
+		processInstance.setDefinitionCode(definitionCode);
+		processInstance.setDefinitionVersion(version.longValue());
+		processInstance.setParentId(parentId);
+		processInstance.setParentActivityId(parentActivityId);
 		//TODO 需要重构优化，可以让用户自定义主键生成策略，和标题生成策略，默认使用UUID，生成ID后要检查是否已经存在
 		String processInstanceId = UUID.randomUUID().toString();
-		processInstancePo.setId(processInstanceId);
+		processInstance.setId(processInstanceId);
+		processInstance.setName("临时名称,这里通过定义的规则替换");
+		processInstance.setStatus("RUN");
+		processInstance.setStartTime(new Date());
+		processInstance.setParentId(null);
+		processInstanceRepository.save(processInstance);
+		processInstanceFormRepository.save(processInstanceId, businessForm);
 		
-		processInstancePo.setName("临时名称,这里通过定义的规则替换");
-		processInstancePo.setStatus("RUN");
-		processInstancePo.setStartTime(new Date());
-		processInstancePo.setParentId(null);
-		processInstanceRepository.save(processInstancePo);
-		
-		ProcessInstanceVo processInstanceVo = new ProcessInstanceVo();
-		BeanUtils.copyProperties(processInstancePo, processInstanceVo);
-		
-		IXflowContext xflowContext = new ProcessInstanceContext(applicationContext,processInstanceVo);
+		IXflowContext xflowContext = new ProcessInstanceContext(applicationContext,processInstance,businessForm);
 		boolean end = processDefinition.startProcess(xflowContext);
 		if(end){
-			processInstanceVo.setEndTime(new Date());
-			processInstanceVo.setStatus(ProcessInstanceVo.STATUS_END);
+			processInstance.setEndTime(new Date());
+			processInstance.setStatus(IProcessInstanceService.STATUS_END);
 		}
 		
-		return processInstanceVo;
+		//释放锁
+		try {
+			lockService.unLock(definitionCode, businessKey);
+		} catch (IOException e) {
+			//TODO 这里可能会导致业务开启流程，但是锁依然没有被释放，记录到异常日志
+		}
+		
+		return processInstance;
 	}
 	
 	@Override
-	public ProcessInstanceVo start(String definitionCode, String businessKey, String businessForm,Participant creator) {
+	public ProcessInstance start(String definitionCode, String businessKey, String businessForm,Participant creator) {
 		return start(definitionCode, businessKey, businessForm, creator, null,null);
 	}
 	
 	@Override
-	public List<ProcessInstanceVo> listProcessInstanceByBusinessKey(String businessKey) {
+	public List<ProcessInstance> listProcessInstanceByBusinessKey(String businessKey) {
 		return processInstanceRepository.listProcessInstanceByBusinessKey(businessKey);
 	}
 
 	@Override
-	public ProcessInstanceVo getRunningByBusinessKey(String definitionCode,String businessKey) {
+	public ProcessInstance getRunningByBusinessKey(String definitionCode,String businessKey) {
 		return processInstanceRepository.getRunningByBusinessKey(definitionCode,businessKey);
 	}
 
 	@Override
-	public ProcessInstanceVo getProcessInstance(String processInstanceId) {
+	public ProcessInstance getProcessInstance(String processInstanceId) {
 		return processInstanceRepository.get(processInstanceId);
 	}
 
 	@Override
 	public void close(String processInstanceId, Participant participant, String comment) {
 		taskRepository.removeAllTask(processInstanceId);
-		processInstanceRepository.updateStatus(processInstanceId,ProcessInstanceVo.STATUS_CLOSE);
+		processInstanceRepository.updateStatus(processInstanceId,IProcessInstanceService.STATUS_CLOSE);
 	}
 
 	@Override
 	public void closeByBusinessKey(String definitionCode, String businessKey,Participant participant, String comment) {
-		ProcessInstanceVo processInstanceVo = processInstanceRepository.getRunningByBusinessKey(definitionCode, businessKey);
-		taskRepository.removeAllTask(processInstanceVo.getId());
-		processInstanceRepository.updateStatus(processInstanceVo.getId(),ProcessInstanceVo.STATUS_CLOSE);
+		ProcessInstance processInstance = processInstanceRepository.getRunningByBusinessKey(definitionCode, businessKey);
+		taskRepository.removeAllTask(processInstance.getId());
+		processInstanceRepository.updateStatus(processInstance.getId(),IProcessInstanceService.STATUS_CLOSE);
 	}
 
 	@Override
-	public Page<ProcessInstanceVo> query(ProcessInstanceCondition processInstanceCondition) {
+	public Page<ProcessInstance> query(ProcessInstanceCondition processInstanceCondition) {
 		return processInstanceRepository.query(processInstanceCondition);
 	}
 
 	@Override
-	public Page<ProcessInstanceVo> queryJoin(ProcessInstanceCondition processInstanceCondition) {
+	public Page<ProcessInstance> queryJoin(ProcessInstanceCondition processInstanceCondition) {
 		return processInstanceRepository.queryJoin(processInstanceCondition);
 	}
 

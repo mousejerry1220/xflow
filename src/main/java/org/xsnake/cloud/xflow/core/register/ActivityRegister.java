@@ -28,7 +28,7 @@ import org.xsnake.cloud.xflow.core.activity.TaskActivity;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
 @Component  
-@ConfigurationProperties(prefix="xflow")  
+@ConfigurationProperties(prefix="xflow")
 public class ActivityRegister {
 	
 	

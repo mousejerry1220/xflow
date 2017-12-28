@@ -10,7 +10,7 @@ import org.xsnake.cloud.xflow.core.context.ApplicationContext;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 import org.xsnake.cloud.xflow.service.api.Participant;
-import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstance;
 import org.xsnake.cloud.xflow.service.impl.ProcessInstanceServiceImpl;
 
 public abstract class SubProcessActivity extends AutomaticActivity {
@@ -34,19 +34,19 @@ public abstract class SubProcessActivity extends AutomaticActivity {
 	@Override
 	public final List<Transition> doWork(IXflowContext context) {
 		ProcessInstanceServiceImpl pis = (ProcessInstanceServiceImpl)context.getApplicationContext().getProcessInstanceService();
-		ProcessInstanceVo processInstanceVo = pis.start(
+		ProcessInstance processInstance = pis.start(
 				definitionCode,
-				context.getProcessInstanceContext().getProcessInstanceVo().getBusinessKey(),
+				context.getProcessInstanceContext().getProcessInstance().getBusinessKey(),
 				context.getBusinessForm(),
 				new Participant(
-					context.getProcessInstanceContext().getProcessInstanceVo().getCreatorId(),
-					context.getProcessInstanceContext().getProcessInstanceVo().getCreatorName(),
-					context.getProcessInstanceContext().getProcessInstanceVo().getCreatorType()
+					context.getProcessInstanceContext().getProcessInstance().getCreatorId(),
+					context.getProcessInstanceContext().getProcessInstance().getCreatorName(),
+					context.getProcessInstanceContext().getProcessInstance().getCreatorType()
 				),
-				context.getProcessInstanceContext().getProcessInstanceVo().getId(),
+				context.getProcessInstanceContext().getProcessInstance().getId(),
 				id);
-		return doWork(processInstanceVo , context);
+		return doWork(processInstance , context);
 	}
 	
-	public abstract List<Transition> doWork(ProcessInstanceVo subProcessInstanceVo , IXflowContext context);
+	public abstract List<Transition> doWork(ProcessInstance subProcessInstance , IXflowContext context);
 }

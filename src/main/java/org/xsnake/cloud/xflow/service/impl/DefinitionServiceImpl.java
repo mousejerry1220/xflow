@@ -5,20 +5,22 @@ import java.math.BigDecimal;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.xsnake.cloud.xflow.dao.repository.DefinitionRepository;
-import org.xsnake.cloud.xflow.dao.repository.pojo.DefinitionPo;
 import org.xsnake.cloud.xflow.exception.XflowBusinessException;
+import org.xsnake.cloud.xflow.service.api.DefinitionCondition;
 import org.xsnake.cloud.xflow.service.api.IDefinitionService;
 import org.xsnake.cloud.xflow.service.api.Page;
-import org.xsnake.cloud.xflow.service.api.PageCondition;
-import org.xsnake.cloud.xflow.service.api.vo.DefinitionVo;
+import org.xsnake.cloud.xflow.service.api.vo.Definition;
+
 
 @Service
+@RestController
+@Transactional(readOnly=false,rollbackFor=Exception.class,propagation=Propagation.REQUIRED)
 public class DefinitionServiceImpl implements IDefinitionService{
-	
-	public static final String STATUS_DISABLE = "disable";
-	
-	public static final String STATUS_ENABLE = "enable";
 	
 	@Autowired
 	DefinitionRepository definitionRepository;
@@ -37,7 +39,7 @@ public class DefinitionServiceImpl implements IDefinitionService{
 			throw new XflowBusinessException("流程定义代码已经存在");
 		}
 		//新增流程定义，初始状态为不可用，必须有了定义实例后才可以生效
-		definitionRepository.save(new DefinitionPo(code,name,remark));
+		definitionRepository.save(code,name,remark);
 	}
 
 	@Override
@@ -45,12 +47,12 @@ public class DefinitionServiceImpl implements IDefinitionService{
 		if(StringUtils.isEmpty(code)){
 			throw new IllegalArgumentException("流程定义代码不能为空");
 		}
-		definitionRepository.update(new DefinitionPo(code,name,remark));
+		definitionRepository.update(code,name,remark);
 	}
 
 	@Override
-	public Page<DefinitionVo> query(PageCondition pageCondition) {
-		return definitionRepository.query(pageCondition);
+	public Page<Definition> query(@RequestBody DefinitionCondition definitionCondition) {
+		return definitionRepository.query(definitionCondition);
 	}
 
 	@Override

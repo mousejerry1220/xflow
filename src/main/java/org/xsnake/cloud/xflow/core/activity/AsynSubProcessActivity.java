@@ -5,7 +5,7 @@ import java.util.List;
 import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.Transition;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
-import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstance;
 
 /**
  * 异步子流程
@@ -21,7 +21,7 @@ public class AsynSubProcessActivity extends SubProcessActivity {
 	}
 
 	@Override
-	public List<Transition> doWork(ProcessInstanceVo subProcessInstanceVo, IXflowContext context) {
+	public List<Transition> doWork(ProcessInstance subProcessInstance, IXflowContext context) {
 		return toTransitionList;
 	}
 	

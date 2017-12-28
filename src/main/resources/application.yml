@@ -11,3 +11,6 @@ jdbc:
   driverClassName: com.mysql.jdbc.Driver
   username: root
   password: root
+zookeeper:
+  timeout: 5000
+  url: 127.0.0.1:2181
