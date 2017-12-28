@@ -6,7 +6,7 @@ import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.Transition;
 import org.xsnake.cloud.xflow.core.Waitable;
 import org.xsnake.cloud.xflow.core.context.IXflowContext;
-import org.xsnake.cloud.xflow.service.api.vo.ProcessInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.ProcessInstance;
 
 public class SynSubProcessActivity extends SubProcessActivity implements Waitable {
 
@@ -17,8 +17,8 @@ public class SynSubProcessActivity extends SubProcessActivity implements Waitabl
 	}
 
 	@Override
-	public List<Transition> doWork(ProcessInstanceVo subProcessInstanceVo , IXflowContext context) {
-		if(subProcessInstanceVo.isEnd()){
+	public List<Transition> doWork(ProcessInstance subProcessInstance , IXflowContext context) {
+		if(subProcessInstance.isEnd()){
 			return toTransitionList;
 		}
 		return null;

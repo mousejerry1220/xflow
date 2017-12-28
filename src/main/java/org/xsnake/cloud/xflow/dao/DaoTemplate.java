@@ -104,9 +104,10 @@ public class DaoTemplate {
 	}
 	
 	private String getSQL(String sql, int start, int end){
-		return getOracle(sql, start, end);
+		return getMysql(sql, start, end);
 	}
 	
+	@SuppressWarnings("unused")
 	private String getOracle(String sql, int start, int end) {
         StringBuffer oracleSql = new StringBuffer();
         oracleSql.append("SELECT * FROM  ( SELECT A.*, ROWNUM RN FROM ( ")
@@ -117,6 +118,15 @@ public class DaoTemplate {
                  .append(start);
         return oracleSql.toString();
 	}
+
+	private String getMysql(String sql, int start, int end) {
+        StringBuffer oracleSql = new StringBuffer();
+        oracleSql.append("SELECT * FROM  ( ")
+                 .append(sql)
+                 .append(" ) _T LIMIT ").append(start) .append(",").append(end);
+        return oracleSql.toString();
+	}
+
 	
 	public <T> List<T> query(String sql,Class<T> clazz){
 		return queryForClass(sql,null,clazz);

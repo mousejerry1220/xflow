@@ -9,10 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xsnake.cloud.xflow.dao.DaoTemplate;
-import org.xsnake.cloud.xflow.dao.repository.pojo.DefinitionInstancePo;
 import org.xsnake.cloud.xflow.service.api.Page;
 import org.xsnake.cloud.xflow.service.api.PageCondition;
-import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstanceVo;
+import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstance;
 
 @Component
 public class DefinitionInstanceRepository {
@@ -32,31 +31,31 @@ public class DefinitionInstanceRepository {
 		}
 	}
 
-	public void save(DefinitionInstancePo definitionInstancePo){
+	public void save(DefinitionInstance definitionInstance){
 		daoTemplate.update(" INSERT INTO XFLOW_DEFINITION_INSTANCE (CODE,VERSION,STATUS,CREATE_DATE,LAST_UPDATE_DATE,REMARK) VALUES (?,?,?,?,?,?) ",
 		new Object[]{
-				definitionInstancePo.getCode(),
-				definitionInstancePo.getVersion(),
+				definitionInstance.getCode(),
+				definitionInstance.getVersion(),
 				STATUS_NEW,
 				new Date(),
 				new Date(),
-				definitionInstancePo.getRemark()
+				definitionInstance.getRemark()
 		});
 	}
 	
-	public DefinitionInstanceVo get(String code,Long version){
+	public DefinitionInstance get(String code,Long version){
 		return daoTemplate.queryForObject("SELECT CODE , VERSION , STATUS, CREATE_DATE , LAST_UPDATE_DATE, REMARK FROM XFLOW_DEFINITION_INSTANCE WHERE CODE = ? AND VERSION = ? ", 
 				new Object[]{code,version},
-				DefinitionInstanceVo.class);
+				DefinitionInstance.class);
 	}
 	
-	public void update(DefinitionInstancePo definitionInstancePo){
+	public void update(DefinitionInstance definitionInstance){
 		daoTemplate.update(" UPDATE XFLOW_DEFINITION_INSTANCE SET REMARK = ? , LAST_UPDATE_DATE = ? WHERE CODE = ? AND VERSION = ? AND STATUS = ? ", 
 		new Object[]{
-				definitionInstancePo.getRemark(),
+				definitionInstance.getRemark(),
 				new Date(),
-				definitionInstancePo.getCode(),
-				definitionInstancePo.getVersion(),
+				definitionInstance.getCode(),
+				definitionInstance.getVersion(),
 				STATUS_NEW
 		});
 	}
@@ -69,7 +68,7 @@ public class DefinitionInstanceRepository {
 		return daoTemplate.queryBigDecimal(" SELECT IFNULL(CURRENT_VERSION , 0) FROM XFLOW_DEFINITION WHERE CODE = ? ", new Object[]{code});
 	}
 	
-	public Page<DefinitionInstanceVo> query(String code ,PageCondition pageCondition){
+	public Page<DefinitionInstance> query(String code ,PageCondition pageCondition){
 		StringBuffer sql = new StringBuffer(" SELECT CODE,REMARK,STATUS,VERSION,CREATE_DATE,LAST_UPDATE_DATE FROM XFLOW_DEFINITION_INSTANCE WHERE CODE = ? ");
 		List<Object> args = new ArrayList<Object>();
 		args.add(code);
@@ -79,7 +78,7 @@ public class DefinitionInstanceRepository {
 		}
 		
 		sql.append(" ORDER BY VERSION DESC ");
-		return daoTemplate.search(sql.toString(), args.toArray(), pageCondition.getPage(), pageCondition.getRows() , DefinitionInstanceVo.class);
+		return daoTemplate.search(sql.toString(), args.toArray(), pageCondition.getPage(), pageCondition.getRows() , DefinitionInstance.class);
 	}
 	
 }

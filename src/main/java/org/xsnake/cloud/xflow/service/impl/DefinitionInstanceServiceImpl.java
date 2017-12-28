@@ -11,19 +11,17 @@ import org.xsnake.cloud.xflow.core.context.ApplicationContext;
 import org.xsnake.cloud.xflow.dao.repository.DefinitionInstanceRepository;
 import org.xsnake.cloud.xflow.dao.repository.DefinitionInstanceXMLRepository;
 import org.xsnake.cloud.xflow.dao.repository.DefinitionRepository;
-import org.xsnake.cloud.xflow.dao.repository.pojo.DefinitionInstancePo;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 import org.xsnake.cloud.xflow.service.api.IDefinitionInstanceService;
 import org.xsnake.cloud.xflow.service.api.Page;
 import org.xsnake.cloud.xflow.service.api.PageCondition;
-import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstanceVo;
-
+import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstance;
 @Service
 public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService{
 
-	public final static String STATUS_RELEASE = "release";
+	public final static String STATUS_RELEASE = "RELEASE";
 	
-	public final static String STATUS_NEW = "new";
+	public final static String STATUS_NEW = "NEW";
 	
 	@Autowired
 	ApplicationContext applicationContext;
@@ -57,12 +55,12 @@ public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService
 		BigDecimal maxVersion = definitionInstanceRepository.currentMaxVersion(code);
 		Long version = maxVersion.longValue() + 1;
 		
-		DefinitionInstancePo definitionInstancePo = new DefinitionInstancePo();
-		definitionInstancePo.setCode(code);
-		definitionInstancePo.setVersion(version);
-		definitionInstancePo.setRemark(remark);
+		DefinitionInstance definitionInstance = new DefinitionInstance();
+		definitionInstance.setCode(code);
+		definitionInstance.setVersion(version);
+		definitionInstance.setRemark(remark);
 		
-		definitionInstanceRepository.save(definitionInstancePo);
+		definitionInstanceRepository.save(definitionInstance);
 		definitionInstanceXMLRepository.save(code, version, xml);
 	}
 
@@ -79,22 +77,21 @@ public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService
 			throw new XflowDefinitionException("流程定义XML有错误：" + e.getMessage());
 		}
 		//判断状态是否已经发布
-		DefinitionInstanceVo definitionInstanceVo = definitionInstanceRepository.get(code, version);
+		DefinitionInstance definitionInstance = definitionInstanceRepository.get(code, version);
 		
-		if(definitionInstanceVo == null){
+		if(definitionInstance == null){
 			throw new XflowDefinitionException("没有找到要更新的数据");
 		}
 		
-		if(DefinitionInstanceRepository.STATUS_RELEASE.equals(definitionInstanceVo.getStatus())){
+		if(DefinitionInstanceRepository.STATUS_RELEASE.equals(definitionInstance.getStatus())){
 			throw new XflowDefinitionException("流程定义实例已经被发布，不能再进行修改操作");
 		}
 		
-		DefinitionInstancePo definitionInstancePo = new DefinitionInstancePo();
-		definitionInstancePo.setCode(code);
-		definitionInstancePo.setVersion(version);
-		definitionInstancePo.setRemark(remark);
-		
-		definitionInstanceRepository.update(definitionInstancePo);
+		definitionInstance = new DefinitionInstance();
+		definitionInstance.setCode(code);
+		definitionInstance.setVersion(version);
+		definitionInstance.setRemark(remark);
+		definitionInstanceRepository.update(definitionInstance);
 		definitionInstanceXMLRepository.update(code, version, xml);
 	}
 
@@ -117,7 +114,7 @@ public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService
 	}
 
 	@Override
-	public Page<DefinitionInstanceVo> query(String code, PageCondition pageCondition) {
+	public Page<DefinitionInstance> query(String code, PageCondition pageCondition) {
 		if(StringUtils.isEmpty(code)){
 			throw new IllegalArgumentException("流程定义代码不能为空");
 		}
