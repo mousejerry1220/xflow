@@ -8,21 +8,35 @@ public class OperateContext extends TaskContext{
 
 	Participant operator;
 	
-	String remark;
+	String suggestion;
 	
 	List<Participant> participantList;
 	
 	OperateType operateType;
 	
+	String toTransitionId; 
+	
 	public static enum OperateType {
-		complete,reject,assign,support
+		
+		start("START"),complete("COMPLETE"),reject("REJECT"),assign("ASSIGN"),support("SUPPORT");
+		
+		private String type;
+		
+		OperateType(String type){
+			this.type = type;
+		}
+		
+		@Override
+		public String toString() {
+			return type;
+		}
 	}
 	
-	public OperateContext(ApplicationContext applicationContext,String taskId,OperateType operateType,Participant operator,String remark) {
+	public OperateContext(ApplicationContext applicationContext,String taskId,OperateType operateType,Participant operator,String suggestion) {
 		super(applicationContext,taskId);
 		this.operateType = operateType;
 		this.operator = operator;
-		this.remark = remark;
+		this.suggestion = suggestion;
 	}
 	
 	public OperateContext(ApplicationContext applicationContext, String taskId,OperateType operateType,Participant operator,String remark,List<Participant> participantList) {
@@ -30,7 +44,20 @@ public class OperateContext extends TaskContext{
 		this.participantList = participantList;
 	}
 
-	public OperateContext getOperateContext() {
-		return this;
+	public String getToTransitionId() {
+		return toTransitionId;
 	}
+
+	public void setToTransitionId(String toTransitionId) {
+		this.toTransitionId = toTransitionId;
+	}
+
+	public Participant getOperator() {
+		return operator;
+	}
+
+	public String getSuggestion() {
+		return suggestion;
+	}
+	
 }

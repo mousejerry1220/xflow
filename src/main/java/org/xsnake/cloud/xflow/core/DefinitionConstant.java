@@ -12,21 +12,24 @@ public class DefinitionConstant {
 	
 	public static final String ELEMENT_ACTIVITY_ATTRIBUTE_NAME = "name";
 
-	public static final String ELEMENT_ACTIVITY_ATTRIBUTES = "attributes";
+	public static final String ELEMENT_ATTRIBUTES = "attributes";
 	
-	public static final String ELEMENT_ACTIVITY_ATTRIBUTES_ATTRIBUTE = "attribute";
+	public static final String ELEMENT_ATTRIBUTES_ATTRIBUTE = "attribute";
 	
-	public static final String ELEMENT_ACTIVITY_ATTRIBUTES_ATTRIBUTE_KEY = "name";
+	public static final String ELEMENT_ATTRIBUTES_ATTRIBUTE_KEY = "name";
 	
 	public static final String ELEMENT_TRANSITIONS = "transitions";
 	
 	public static final String ELEMENT_TRANSITION = "transition";
 	
 	
-	public static final String ELEMENT_ACTIVITY_PARTICIPANTS = "participants";
+//	public static final String ELEMENT_ACTIVITY_PARTICIPANTS = "participants";
 	
-	public static final String ELEMENT_ACTIVITY_PARTICIPANTS_PARTICIPANT = "participant";
+	public static final String ELEMENT_ACTIVITY_PARTICIPANT = "participant";
 	
+	public static final String ELEMENT_ACTIVITY_PARTICIPANT_TYPE = "type";
+	
+	public static final String ELEMENT_ACTIVITY_PARTICIPANT_ASSIGN = "assign";
 	
 	//内置活动类型定义，对应ELEMENT_ACTIVITY_ATTRIBUTE_TYPE
 	

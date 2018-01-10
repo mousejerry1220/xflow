@@ -20,7 +20,7 @@ public class LockService {
 		if(exists){
 			throw new LockedException();
 		}
-		zookeeperTemplate.node(key);
+		zookeeperTemplate.$node(key);
 	}
 
 	public void unLock(String... keys) throws IOException {
@@ -32,10 +32,9 @@ public class LockService {
 		StringBuffer key = new StringBuffer(LOCK_PATH);
 		key.append("/");
 		for(String k : keys){
-			key.append(k).append("_");
+			key.append(k.toString().replaceAll("/", "-")).append("_");
 		}
-		String result = key.toString().replaceAll("/", "-");
-		return result;
+		return key.toString();
 	}
 
 }

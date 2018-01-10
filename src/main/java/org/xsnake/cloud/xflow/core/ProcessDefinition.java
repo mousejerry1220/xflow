@@ -12,8 +12,10 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.xsnake.cloud.xflow.core.activity.EndActivity;
 import org.xsnake.cloud.xflow.core.activity.StartActivity;
+import org.xsnake.cloud.xflow.core.activity.SupportTaskActivity;
 import org.xsnake.cloud.xflow.core.context.ApplicationContext;
-import org.xsnake.cloud.xflow.core.context.IXflowContext;
+import org.xsnake.cloud.xflow.core.context.ProcessInstanceContext;
+import org.xsnake.cloud.xflow.exception.XflowBusinessException;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
 public class ProcessDefinition implements Serializable{
@@ -43,20 +45,26 @@ public class ProcessDefinition implements Serializable{
 		Element transitionsElement = root.element(DefinitionConstant.ELEMENT_TRANSITIONS);
 		
 		List<Element> activitys = activitysElement.elements(DefinitionConstant.ELEMENT_ACTIVITY);
-		List<Element> transitions = transitionsElement.elements(DefinitionConstant.ELEMENT_TRANSITIONS);
+		List<Element> transitions = transitionsElement.elements(DefinitionConstant.ELEMENT_TRANSITION);
 		
 		activityList = parseActivitys(context,activitys);
 		transitionList = parseTransitions(transitions);
 		setRelationship();
 		validate(context);
+		setVirtualNode();
 	}
 	
+	private void setVirtualNode() {
+		activityList.add(new SupportTaskActivity());
+	}
+
 	private void validate(ApplicationContext context) {
 		int startCount = 0;
 		int endCount = 0;
 		for(Activity activity : activityList){
 			if(activity instanceof StartActivity){
 				startCount++;
+				startActivity = activity;
 			}
 			if(activity instanceof EndActivity){
 				endCount++;
@@ -105,7 +113,7 @@ public class ProcessDefinition implements Serializable{
 			Activity activity = null;
 			Class<? extends Activity> activityCls = context.getActivityRegister().getActivity(type);
 			try {
-				constructor = activityCls.getDeclaredConstructor(Element.class);
+				constructor = activityCls.getDeclaredConstructor(ApplicationContext.class,Element.class);
 			} catch (NoSuchMethodException e) {
 				throw new XflowDefinitionException("自定义的活动类没有找到构造函数 ："+e.getMessage());
 			} catch(SecurityException e){
@@ -113,13 +121,16 @@ public class ProcessDefinition implements Serializable{
 			}
 			
 			try {
-				activity = constructor.newInstance(activityElement);
+				activity = constructor.newInstance(context,activityElement);
 			} catch (InstantiationException 
 					| IllegalAccessException 
-					| IllegalArgumentException
-					| InvocationTargetException e) {
+					| IllegalArgumentException e) {
 				throw new XflowDefinitionException("自定义的活动类实例化出错："+e.getMessage());
+			} catch (InvocationTargetException e) {
+				e.getCause().printStackTrace();
+				throw new XflowDefinitionException("自定义的活动类实例化出错："+e.getCause().getMessage());
 			}
+			
 			list.add(activity);
 		}
 		return list;
@@ -134,10 +145,19 @@ public class ProcessDefinition implements Serializable{
 		return processDefinition;
 	}
 	
-	public boolean startProcess(IXflowContext xflowContext){
-		return startActivity.process(xflowContext);
+	public boolean startProcess(ProcessInstanceContext context){
+		return startActivity.process(context);
 	}
 
+	public Activity getActivity(String activityId){
+		for(Activity activity : activityList){
+			if(activity.getId().equals(activityId)){
+				return activity;
+			}
+		}
+		throw new XflowBusinessException("异常：传入的节点ID未找到");
+	}
+	
 	public List<Activity> getActivityList() {
 		return activityList;
 	}

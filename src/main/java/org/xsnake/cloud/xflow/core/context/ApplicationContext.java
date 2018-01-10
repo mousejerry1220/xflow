@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.xsnake.cloud.xflow.core.register.ActivityRegister;
 import org.xsnake.cloud.xflow.core.register.ParticipantHandleRegister;
 import org.xsnake.cloud.xflow.dao.DaoTemplate;
+import org.xsnake.cloud.xflow.dao.repository.DefinitionInstanceXMLRepository;
 import org.xsnake.cloud.xflow.service.api.IProcessInstanceService;
 
 @Component
@@ -22,6 +23,9 @@ public class ApplicationContext extends Context{
 	@Autowired
 	private IProcessInstanceService processInstanceService;
 
+	@Autowired
+	private DefinitionInstanceXMLRepository definitionInstanceXMLRepository;
+	
 	public ActivityRegister getActivityRegister() {
 		return activityRegister;
 	}
@@ -36,6 +40,10 @@ public class ApplicationContext extends Context{
 
 	public IProcessInstanceService getProcessInstanceService() {
 		return processInstanceService;
+	}
+
+	public DefinitionInstanceXMLRepository getDefinitionInstanceXMLRepository() {
+		return definitionInstanceXMLRepository;
 	}
 	
 }

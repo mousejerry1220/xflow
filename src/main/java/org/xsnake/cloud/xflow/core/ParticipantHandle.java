@@ -1,12 +1,17 @@
 package org.xsnake.cloud.xflow.core;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.xsnake.cloud.xflow.core.context.IXflowContext;
+import org.dom4j.Element;
+import org.xsnake.cloud.xflow.core.context.ProcessInstanceContext;
 import org.xsnake.cloud.xflow.service.api.Participant;
 
 public abstract class ParticipantHandle {
 
+	protected Map<String,String> attributes = new HashMap<String,String>();
+	
 	public static enum Type {
 		
 		assign("assign"), 
@@ -32,13 +37,32 @@ public abstract class ParticipantHandle {
 		}
 		
 	}
-
-	protected abstract List<Participant> _findParticipantList(IXflowContext context);
 	
-	public final List<Participant> findParticipantList(IXflowContext context){
+	public ParticipantHandle(Element participantElement){
+		parseAttributes(participantElement);
+	}
+	
+	private void parseAttributes(final Element participantElement) {
+		Element propsElement = participantElement.element(DefinitionConstant.ELEMENT_ATTRIBUTES);
+		if(propsElement == null){
+			return;
+		}
+		List<Element> propertyList = propsElement.elements(DefinitionConstant.ELEMENT_ATTRIBUTES_ATTRIBUTE);
+		if(propertyList == null){
+			return;
+		}
+		for(Element propertyElement : propertyList){
+			attributes.put(propertyElement.attributeValue(DefinitionConstant.ELEMENT_ATTRIBUTES_ATTRIBUTE_KEY), propertyElement.getText());
+		}
+	}
+	
+	
+	protected abstract List<Participant> findParticipantList(ProcessInstanceContext context);
+	
+	public final List<Participant> _findParticipantList(ProcessInstanceContext context){
 		List<Participant> list = null;
 		try{
-			list = _findParticipantList(context);
+			list = findParticipantList(context);
 		}catch (Exception e) {
 			//TODO 记录出错的参与者处理器，可以让管理员尽快解决错误。同时把这个任务转交到默认管理员处理
 		}

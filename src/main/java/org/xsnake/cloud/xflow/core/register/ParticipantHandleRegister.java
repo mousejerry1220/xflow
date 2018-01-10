@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.xsnake.cloud.xflow.core.Activity;
 import org.xsnake.cloud.xflow.core.DefinitionConstant;
+import org.xsnake.cloud.xflow.core.ParticipantHandle;
 import org.xsnake.cloud.xflow.core.participant.AssignParticipant;
 import org.xsnake.cloud.xflow.exception.XflowDefinitionException;
 
@@ -36,14 +36,14 @@ public class ParticipantHandleRegister {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Class<? extends Activity> getParticipantHandle(String type){
-		Class<Activity> cls = null;
+	public Class<? extends ParticipantHandle> getParticipantHandle(String type){
+		Class<ParticipantHandle> cls = null;
 		String className = participants.get(type);
 		if(StringUtils.isEmpty(className)){
 			throw new XflowDefinitionException("参与者类型："+ type + " , 没有找到对应的配置项");
 		}
 		try{
-			cls = (Class<Activity>) Class.forName(className);
+			cls = (Class<ParticipantHandle>) Class.forName(className);
 		}catch (ClassNotFoundException e) {
 			throw new XflowDefinitionException("参与者类型："+ type +" , 没有找到对应的类 : " + className);
 		}

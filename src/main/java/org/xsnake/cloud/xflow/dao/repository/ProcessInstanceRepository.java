@@ -41,7 +41,7 @@ public class ProcessInstanceRepository {
 	}
 
 	public ProcessInstance getRunningByBusinessKey(String definitionCode,String businessKey) {
-		return daoTemplate.queryForObject(" SELECT * FROM XFLOW_PROCESS_INSTANCE WHERE BUSINESS_KEY = ? AND STATUS = ? ", new Object[]{businessKey,IProcessInstanceService.STATUS_RUNNING}, ProcessInstance.class);
+		return daoTemplate.queryForObject(" SELECT * FROM XFLOW_PROCESS_INSTANCE WHERE DEFINITION_CODE = ? and BUSINESS_KEY = ? AND STATUS = ? ", new Object[]{definitionCode,businessKey,IProcessInstanceService.STATUS_RUNNING}, ProcessInstance.class);
 	}
 	
 	public ProcessInstance get(String id) {

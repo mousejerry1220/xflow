@@ -19,10 +19,6 @@ import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstance;
 @Service
 public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService{
 
-	public final static String STATUS_RELEASE = "RELEASE";
-	
-	public final static String STATUS_NEW = "NEW";
-	
 	@Autowired
 	ApplicationContext applicationContext;
 	
@@ -53,6 +49,9 @@ public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService
 		
 		//生成最新版本的版本号码
 		BigDecimal maxVersion = definitionInstanceRepository.currentMaxVersion(code);
+		if(maxVersion == null){
+			maxVersion = new BigDecimal(0);
+		}
 		Long version = maxVersion.longValue() + 1;
 		
 		DefinitionInstance definitionInstance = new DefinitionInstance();
@@ -83,7 +82,7 @@ public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService
 			throw new XflowDefinitionException("没有找到要更新的数据");
 		}
 		
-		if(DefinitionInstanceRepository.STATUS_RELEASE.equals(definitionInstance.getStatus())){
+		if(STATUS_RELEASE.equals(definitionInstance.getStatus())){
 			throw new XflowDefinitionException("流程定义实例已经被发布，不能再进行修改操作");
 		}
 		
@@ -101,7 +100,7 @@ public class DefinitionInstanceServiceImpl implements IDefinitionInstanceService
 			throw new IllegalArgumentException("流程定义代码不能为空");
 		}
 		//修改自己的状态，修改后就不能再修改
-		definitionInstanceRepository.updateStatus(code, version, DefinitionInstanceRepository.STATUS_RELEASE);
+		definitionInstanceRepository.updateStatus(code, version, STATUS_RELEASE);
 		definitionRepository.updateCurrentVersion(code,version);
 	}
 

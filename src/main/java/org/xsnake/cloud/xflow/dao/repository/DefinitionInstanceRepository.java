@@ -9,16 +9,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xsnake.cloud.xflow.dao.DaoTemplate;
+import org.xsnake.cloud.xflow.service.api.IDefinitionInstanceService;
 import org.xsnake.cloud.xflow.service.api.Page;
 import org.xsnake.cloud.xflow.service.api.PageCondition;
 import org.xsnake.cloud.xflow.service.api.vo.DefinitionInstance;
 
 @Component
 public class DefinitionInstanceRepository {
-	
-	public final static String STATUS_RELEASE = "release";
-	
-	public final static String STATUS_NEW = "new";
 	
 	@Autowired
 	DaoTemplate daoTemplate;
@@ -36,7 +33,7 @@ public class DefinitionInstanceRepository {
 		new Object[]{
 				definitionInstance.getCode(),
 				definitionInstance.getVersion(),
-				STATUS_NEW,
+				IDefinitionInstanceService.STATUS_NEW,
 				new Date(),
 				new Date(),
 				definitionInstance.getRemark()
@@ -56,7 +53,7 @@ public class DefinitionInstanceRepository {
 				new Date(),
 				definitionInstance.getCode(),
 				definitionInstance.getVersion(),
-				STATUS_NEW
+				IDefinitionInstanceService.STATUS_NEW
 		});
 	}
 	

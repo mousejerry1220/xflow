@@ -1,8 +1,9 @@
 package org.xsnake.cloud.xflow.core.context;
 
+import org.xsnake.cloud.xflow.core.ProcessDefinition;
 import org.xsnake.cloud.xflow.service.api.vo.ProcessInstance;
 
-public class ProcessInstanceContext extends Context implements IXflowContext{
+public class ProcessInstanceContext extends Context {
 
 	protected ApplicationContext applicationContext;
 	
@@ -10,15 +11,13 @@ public class ProcessInstanceContext extends Context implements IXflowContext{
 	
 	protected String businessForm;
 	
+	protected ProcessDefinition processDefinition;
+	
+	protected ProcessInstanceContext(){}
 	public ProcessInstanceContext(ApplicationContext applicationContext , ProcessInstance processInstance , String businessForm) {
 		this.applicationContext = applicationContext;
 		this.processInstance = processInstance;
 		this.businessForm = businessForm;
-	}
-
-	@Override
-	public ProcessInstance getProcessInstance() {
-		return processInstance;
 	}
 
 	public String getBusinessForm() {
@@ -28,16 +27,13 @@ public class ProcessInstanceContext extends Context implements IXflowContext{
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}
-
-	@Override
-	public ProcessInstanceContext getProcessInstanceContext() {
-		return this;
-	}
-
-	//在这里总是返回null
-	@Override
-	public TaskContext getTaskContext() {
-		return null;
+	
+	public ProcessInstance getProcessInstance() {
+		return processInstance;
 	}
 	
+	public ProcessDefinition getProcessDefinition() {
+		return processDefinition;
+	}
+
 }
